@@ -1,0 +1,54 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Web Calculator</title>
+  <style>
+    body { font-family: Arial, sans-serif; max-width: 640px; margin: 2rem auto; padding: 1rem; background: #f7f8fa; }
+    h1 { margin-bottom: 0.5rem; }
+    form { background: #fff; padding: 1rem; border-radius: 8px; box-shadow: 0 2px 6px rgba(0,0,0,0.08); }
+    label { display: block; margin: 0.5rem 0 0.25rem; font-weight: 600; }
+    input, select, button { padding: 0.5rem; font-size: 1rem; width: 100%; box-sizing: border-box; }
+    button { margin-top: 1rem; background: #2563eb; color: #fff; border: none; border-radius: 6px; cursor: pointer; }
+    button:hover { background: #1e4fc7; }
+    .card { margin-top: 1rem; padding: 0.75rem; border-radius: 6px; }
+    .result { background: #e0f2fe; color: #0f172a; }
+    .error { background: #fee2e2; color: #7f1d1d; }
+  </style>
+</head>
+<body>
+  <h1>Web Calculator</h1>
+  <p>Enter two numbers, choose an operation, and submit to see the result.</p>
+
+  <form method="POST">
+    <label for="a">First number</label>
+    <input type="number" step="any" id="a" name="a" required />
+
+    <label for="b">Second number</label>
+    <input type="number" step="any" id="b" name="b" required />
+
+    <label for="op">Operation</label>
+    <select id="op" name="op">
+      <option value="add">Add</option>
+      <option value="subtract">Subtract</option>
+      <option value="multiply">Multiply</option>
+      <option value="divide">Divide</option>
+    </select>
+
+    <button type="submit">Calculate</button>
+  </form>
+
+  {% if result is not none %}
+  <div class="card result">
+    <strong>Result:</strong> {{ result }}
+  </div>
+  {% endif %}
+
+  {% if error %}
+  <div class="card error">
+    <strong>Error:</strong> {{ error }}
+  </div>
+  {% endif %}
+</body>
+</html>
