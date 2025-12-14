@@ -8,6 +8,9 @@ This repo contains a tiny Python module plus tests to demonstrate how to wire up
 - `src/calculator.py` – simple math helpers we will test.
 - `tests/test_calculator.py` – pytest suite that exercises the helpers.
 - `tests/test_app.py` – tests for the Flask endpoints.
+- `tests/test_selenium.py` – optional Selenium UI smoke test (skipped unless enabled).
+- `features/` – behave BDD scenarios and steps.
+- `locustfile.py` – Locust load-test entrypoint.
 - `.github/workflows/ci.yml` – CI pipeline that installs dependencies and runs linting/tests on every push and pull request.
 
 ## Running locally
@@ -27,6 +30,34 @@ This repo contains a tiny Python module plus tests to demonstrate how to wire up
    ```bash
    pytest
    ```
+
+## Optional testing types
+
+### BDD (behave)
+- Install deps (already in `requirements.txt`), then run from repo root:
+  ```bash
+  behave
+  ```
+- Scenarios live in `features/calculator.feature`; steps are in `features/steps/` and use Flask's test client (no live server needed).
+
+### Load testing (Locust)
+- Start the app in another terminal: `python app.py`
+- In a new shell, run:
+  ```bash
+  locust -f locustfile.py --host=http://127.0.0.1:5000
+  ```
+- Open the URL Locust prints (default http://localhost:8089), set user count/spawn rate, and start the test.
+
+### UI smoke (Selenium, optional)
+- Requires Chrome/Chromium available on your machine. The test is skipped unless you opt in.
+- Start the app in another terminal (if not using the embedded fixture): `python app.py`
+- Run with opt-in flag:
+  ```bash
+  RUN_SELENIUM=1 pytest tests/test_selenium.py
+  ```
+- The test spins up a headless Chrome via `webdriver-manager`, fills the form, and asserts the result. Skip in CI unless your runner has a browser.
+
+CI note: GitHub Actions has a separate `selenium` job that sets `RUN_SELENIUM=1` on Ubuntu with headless Chrome. It depends on the main `build` job. If you do not want Selenium in CI, remove or disable that job in `.github/workflows/ci.yml`.
 
 ## How the GitHub workflow works
 - Triggers on pushes and pull requests to `main`.
